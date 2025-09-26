@@ -8,7 +8,12 @@ def _gen_edge_seq():
 
 
 def _get_vertex(r):
-    res = [[0, 0, 0], [-r, 0, 0], [-r * np.cos(np.pi / 4), 0, r * np.sin(np.pi / 4)]]
+    res = [
+        [0, 0, 0],
+        [-r, 0, 0],
+        # [0, 0, r],
+        [-r * np.cos(np.pi / 4), 0, r * np.sin(np.pi / 4)],
+    ]
     return np.array(res).astype(np.int32)
 
 
