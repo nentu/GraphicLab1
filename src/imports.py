@@ -10,3 +10,4 @@ from models.obj_read import ObjModel
 from utils import get_intrinsic_matrix, rotate
 from models.cube import Cube
 from models.camera import Camera
+from models.model import Model

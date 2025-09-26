@@ -24,28 +24,26 @@ if __name__ == "__main__":
     k = 1
 
     while True:
+        plane = np.zeros(shape=(*plane_shape, 3))
+
         model = Camera(99)
 
         # model.vertex_list[:, 1] -= 0.5
 
         rotate(model, 180, rotation, 0)
-
         model.vertex_list[:, 2] += 300 + shift
-        plane = np.zeros(shape=(*plane_shape, 3))
 
         # plane += 255
 
-        projected_model = model.apply_tranform(intrinsic_matrix)
+        projected_model = model.apply_transform(intrinsic_matrix)
 
-        depth = get_depth_map(plane_shape, projected_model)
-        depth = cv2.cvtColor(depth, cv2.COLOR_GRAY2RGB)
-        draw_model(depth, projected_model)
+        draw_model(plane, projected_model)
 
-        cv2.imshow("depth", depth)
+        cv2.imshow("depth", plane)
         if cv2.waitKey(1) == ord("q"):
             break
 
-        shift += 0
+        shift += 1
         rotation += 0.2
         # k += 2e-3
 
