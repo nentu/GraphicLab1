@@ -36,6 +36,7 @@ if __name__ == "__main__":
     triangle = PositionModel(model=TriangleModel(30), camera=camera)
     oArrow = PositionModel(model=ArrowModel(30), camera=camera)
     oArrow.move(-100, 100, 100)
+    oArrow.rotate(-45, 0, -48)
 
     model_list = [triangle, oArrow]
     while True:
@@ -46,14 +47,15 @@ if __name__ == "__main__":
 
         for i in range(3):
             draw_point_name(triangle, i, f"P{i}", plane)
+        # oArrow.rotate(0, 0, 1)
 
         cv2.imshow("depth", plane)
-        key = cv2.waitKey(0)
+        key = cv2.waitKey(1)
         update_camera_pos(key, camera)
         if key == EscCode:
             break
 
-    if "y" in input("Save cam pos: yes/no: "):
+    if "y" in "":  # input("Save cam pos: yes/no: "):
         with open("camera.pickle", "wb") as f:
             pickle.dump(camera, f)
     cv2.destroyAllWindows()

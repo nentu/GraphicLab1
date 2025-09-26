@@ -15,9 +15,9 @@ def _gen_edge_seq():
 def _get_vertex(r):
     res = [
         [0, 0, 0],
-        [-r, 0, 0],
-        [-r * (1 - 0.1), 0.1, 0],
-        [-r * (1 - 0.1), -0.1, 0],
+        [r, 0, 0],
+        [r * (1 - 0.1), 0.1 * r, 0],
+        [r * (1 - 0.1), -0.1 * r, 0],
     ]
     return np.array(res).astype(np.int32)
 
