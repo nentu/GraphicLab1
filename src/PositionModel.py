@@ -3,9 +3,10 @@ import numpy as np
 
 
 class PositionModel:
-    def __init__(self, model, intrinsic_matrix):
+    def __init__(self, camera, model):
+        self.camera = camera
         self.model = model
-        self.intrinsic_matrix = intrinsic_matrix
+
         self.global_coord = np.array([0, 0, 0])
 
     def _move(self, x=0, y=0, z=0, move_global=True):
@@ -27,5 +28,12 @@ class PositionModel:
         self._move(*self.global_coord, move_global=False)
 
     def draw_model(self, plane):
-        projected_model = self.model.apply_transform(self.intrinsic_matrix)
-        draw_model(plane, projected_model)
+        y, p, r = self.camera.ypr
+
+        self._move(*(-self.camera.xyz), move_global=False)
+        rotate(self.model, p, y, r)
+        self.projected_model = self.model.apply_transform(self.camera.intrinsic_matrix)
+        rotate(self.model, p, y, r, invert=True)
+        self._move(*self.camera.xyz, move_global=False)
+
+        draw_model(plane, self.projected_model)

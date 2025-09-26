@@ -9,5 +9,5 @@ from draw_utils import draw_model, get_depth_map
 from models.obj_read import ObjModel
 from utils import get_intrinsic_matrix, rotate
 from models.cube import Cube
-from models.camera import Camera
+from models.camera import Camera as CameraModel
 from models.model import Model
