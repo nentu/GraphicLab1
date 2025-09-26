@@ -1,0 +1,3 @@
+[submodule "3d_reconstruction"]
+	path = 3d_reconstruction
+	url = https://github.com/nentu/3d_reconstruction.git
