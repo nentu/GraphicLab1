@@ -27,7 +27,7 @@ class PositionModel:
         rotate(self.model, p, y, r)
         self._move(*self.global_coord, move_global=False)
 
-    def draw_model(self, plane):
+    def draw_model(self, plane, color_id):
         y, p, r = self.camera.ypr
 
         self._move(*(-self.camera.xyz), move_global=False)
@@ -36,4 +36,4 @@ class PositionModel:
         rotate(self.model, p, y, r, invert=True)
         self._move(*self.camera.xyz, move_global=False)
 
-        draw_model(plane, self.projected_model)
+        draw_model(plane, self.projected_model, color_id=color_id)

@@ -40,6 +40,6 @@ def draw_point_name(model, point_id, name, plane):
         org=plane_coord,
         fontFace=cv2.FONT_HERSHEY_DUPLEX,
         fontScale=0.5,
-        color=(125, 246, 55),
+        color=(0, 0, 0),
         thickness=1,
     )

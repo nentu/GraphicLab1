@@ -14,7 +14,7 @@ x = 0
 y = 0
 
 
-def count_inner_coords(p0, p1, p2, x, y):
+def count_local_coords(p0, p1, p2, x, y):
     return np.int32(
         p0
         + (
@@ -42,12 +42,19 @@ def count_theta(o, pl, l_point):
     return np.arccos((v1 * v2).sum() / (np.linalg.norm(v1) * np.linalg.norm(v2)))
 
 
-
-def count_e(i_rgb, o, pl, l_point, p0, p1, p2,):
+def count_e(
+    i_rgb,
+    o,
+    pl,
+    l_point,
+    p0,
+    p1,
+    p2,
+):
     theta = count_theta(o, pl, l_point)
     alpha = count_alpha(l_point, p0, p1, p2, pl)
-    print(f"theta={theta / np.pi * 180}")
-    print(f"alpha={alpha / np.pi * 180}")
+    # print(f"theta={theta / np.pi * 180}")
+    # print(f"alpha={alpha / np.pi * 180}")
     r = np.linalg.norm(pl - l_point)
-    print(f"{r=}")
+    # print(f"{r=}")
     return (i_rgb * np.cos(theta) * np.cos(alpha)) / (r**2)
