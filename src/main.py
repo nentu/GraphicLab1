@@ -17,16 +17,13 @@ from models.Arrow import ArrowModel
 from models.Triangle import TriangleModel
 from models.Point import PointModel
 from main_utils import update_camera_pos, EscCode, draw_point_name
-
-
-def count_inner_coords(p0, p1, p2, x, y):
-    return np.int32(
-        p0
-        + (
-            (p1 - p0) / np.linalg.norm(p1 - p0) * x
-            + (p2 - p0) / np.linalg.norm(p2 - p0) * y
-        )
-    )
+from ECounter import (
+    count_inner_coords,
+    normal_vector,
+    count_alpha,
+    count_theta,
+    count_e,
+)
 
 
 if __name__ == "__main__":
@@ -47,14 +44,14 @@ if __name__ == "__main__":
     triangle = PositionModel(model=TriangleModel(30), camera=camera)
     oArrow = PositionModel(model=ArrowModel(30), camera=camera)
     oArrow.move(-100, 100, 100)
-    oArrow.rotate(-45, 0, -48)
+    oArrow.rotate(-45, 0, 0)
 
     print(triangle.model.vertex_list)
     print(oArrow.model.vertex_list)
 
     model_list = [triangle, oArrow]
-    x = 0
-    y = 0
+    x = 1
+    y = 1
     while True:
         plane = np.zeros(shape=(*plane_shape, 3))
 
@@ -64,27 +61,43 @@ if __name__ == "__main__":
         for i in range(3):
             draw_point_name(triangle, i, f"P{i}", plane)
         p0, p1, p2 = triangle.model.vertex_list
-        print("p2=", np.int32(p2))
-        point = count_inner_coords(p0, p1, p2, x, y)
-        print("point=", point)
-        key = cv2.waitKey(0)
+        # print("p2=", np.int32(p2))
+        l_point = count_inner_coords(p0, p1, p2, x, y)
+        n_point = normal_vector(p0, p1, p2) * 30
+        n_point += l_point
+        print("n_point=", n_point)
+        key = cv2.waitKey(100)
 
-        if key == ord("a"):
+        if key == ord("j"):
             x += 1
-        elif key == ord("d"):
+        elif key == ord("l"):
             x -= 1
-        elif key == ord("w"):
+        elif key == ord("i"):
             y += 1
-        elif key == ord("s"):
+        elif key == ord("k"):
             y -= 1
 
         p_model = PositionModel(model=PointModel(), camera=camera)
-        p_model.move(x=point[0], y=point[2], z=point[1])
-
+        p_model.move(x=l_point[0], y=l_point[2], z=l_point[1])
         p_model.draw_model(plane)
 
+        draw_point_name(p_model, 0, "L", plane)
+
+        pl = oArrow.model.vertex_list[0]
+        po = oArrow.model.vertex_list[1]
+        alpha = count_alpha(l_point, p0, p1, p2, pl)
+        theta = count_theta(po, pl, l_point)
+        print(f"{pl=}")
+        print("a =", alpha / np.pi * 180)
+        print("o =", theta / np.pi * 180)
+        print("E_rgb =", count_e(10, po, pl, l_point, p0, p1, p2))
+        n_model = PositionModel(model=PointModel(), camera=camera)
+        n_model.move(x=n_point[0], y=n_point[2], z=n_point[1])
+        n_model.draw_model(plane)
+        draw_point_name(n_model, 0, "N", plane)
+
         cv2.imshow("depth", plane)
-        # update_camera_pos(key, camera)
+        update_camera_pos(key, camera)
         if key == EscCode:
             break
 
