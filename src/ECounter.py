@@ -42,19 +42,11 @@ def count_theta(o, pl, l_point):
     return np.arccos((v1 * v2).sum() / (np.linalg.norm(v1) * np.linalg.norm(v2)))
 
 
-def count_e(
-    i_rgb,
-    o,
-    pl,
-    l_point,
-    p0,
-    p1,
-    p2,
-):
+def count_e(i_rgb, o, pl, l_point, p0, p1, p2, r_koef=1):
     theta = count_theta(o, pl, l_point)
     alpha = count_alpha(l_point, p0, p1, p2, pl)
     # print(f"theta={theta / np.pi * 180}")
     # print(f"alpha={alpha / np.pi * 180}")
-    r = np.linalg.norm(pl - l_point)
+    r = np.linalg.norm(pl - l_point) / r_koef
     # print(f"{r=}")
     return (i_rgb * np.cos(theta) * np.cos(alpha)) / (r**2)

@@ -26,10 +26,10 @@ from ECounter import (
 )
 
 
-def create_grid(min, max, step):
+def create_grid(min, max, cnt):
     res = list()
-    for x in np.arange(min, max, step):
-        for y in np.arange(min, max, step):
+    for x in np.linspace(min, max, cnt):
+        for y in np.linspace(min, max, cnt):
             res.append([x, y])
 
     return res
@@ -78,13 +78,13 @@ if __name__ == "__main__":
         key = cv2.waitKey(0)
 
         if key == ord("j"):
-            x += 1
+            oArrow.rotate(1, 0, 0)
         elif key == ord("l"):
-            x -= 1
+            oArrow.rotate(-1, 0, 0)
         elif key == ord("i"):
-            y += 1
+            oArrow.rotate(0, 1, 0)
         elif key == ord("k"):
-            y -= 1
+            oArrow.rotate(0, -1, 0)
 
         p_model = PositionModel(model=PointModel(), camera=camera)
         p_model.move(x=l_point[0], y=l_point[2], z=l_point[1])
@@ -93,12 +93,13 @@ if __name__ == "__main__":
         po = oArrow.model.vertex_list[1]
         # alpha = count_alpha(l_point, p0, p1, p2, pl)
         # theta = count_theta(po, pl, l_point)
+        # print({"po": po, "pl": pl, "l_point": l_point, "p0": p0, "p1": p1, "p2": p2})
         e_rgb = count_e(1e6, po, pl, l_point, p0, p1, p2)
         # print(f"{pl=}")
         # print("a =", alpha / np.pi * 180)
         # print("o =", theta / np.pi * 180)
         # print("E_rgb =", e_rgb)
-
+        e_rgb = np.clip(e_rgb, 0, 30) / 30 * 99
         p_model.draw_model(plane, int(e_rgb))
         draw_point_name(p_model, 0, "L", plane)
 
@@ -107,10 +108,10 @@ if __name__ == "__main__":
         n_model.draw_model(plane, -3)
         draw_point_name(n_model, 0, "N", plane)
 
-        for _x, _y in create_grid(-100, 100, 10):
+        for _x, _y in create_grid(-300, 300, 50):
             l_point = count_local_coords(p0, p1, p2, _x, _y)
-            e_rgb = count_e(1e6, po, pl, l_point, p0, p1, p2)
-            e_rgb = np.clip(e_rgb, 0, 30) / 30 * 99
+            e_rgb = count_e(1e5, po, pl, l_point, p0, p1, p2)
+            e_rgb = (np.clip(e_rgb, -3, 3) + 3) / 6 * 99
             p_model = PositionModel(model=PointModel(), camera=camera)
             p_model.move(x=l_point[0], y=l_point[2], z=l_point[1])
             p_model.draw_model(plane, int(e_rgb))
